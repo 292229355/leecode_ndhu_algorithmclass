@@ -1,0 +1,46 @@
+class Solution {
+public:
+    bool possibleBipartition(int n, vector<vector<int>>& dislikes) {
+        
+        vector<vector<int>> adj(n + 1);
+        for (const auto& edge : dislikes) {
+            adj[edge[0]].push_back(edge[1]);
+            adj[edge[1]].push_back(edge[0]);
+        }
+        
+        
+        vector<int> color(n + 1, 0);
+        
+       
+        for (int i = 1; i <= n; ++i) {
+          
+            if (color[i] == 0) {
+                if (!dfs(i, 1, adj, color)) {
+                    return false; 
+                }
+            }
+        }
+        
+        return true;
+    }
+    
+private:
+    bool dfs(int node, int c, vector<vector<int>>& adj, vector<int>& color) {
+       
+        color[node] = c;
+        
+        
+        for (int neighbor : adj[node]) {
+            
+            if (color[neighbor] == c) {
+                return false;
+            }
+       
+            if (color[neighbor] == 0 && !dfs(neighbor, -c, adj, color)) {
+                return false;
+            }
+        }
+        
+        return true;
+    }
+};
